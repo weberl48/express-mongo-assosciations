@@ -3,3 +3,9 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  form(action='/new-user', method='POST')
+    label(for='name', style='color: black;') Username:
+    input(type='text', name='name')
+    input(type="password" name="password")
+    input(type="password" name="password")
+    input(type='submit', value='New User')
