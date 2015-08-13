@@ -1,5 +1,5 @@
-var mongoose = require("mogoose");
-monggose.connect(process.env.MONGOLAB_URI);
+var mongoose = require("mongoose");
+mongoose.connect(process.env.MONGOLAB_URI);
 mongoose.set("debug", true);
 
 

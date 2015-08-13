@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-var db = require('../lib/mongo.js');
+var db = require('../lib/database.js');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('new', { title: 'Express' });
 });
 
-router.post("/", function(req,res,next){
-  db.calls.newList(req).then(function(){
-    res.redirect("/");
-  });
+router.post("/new-list", function(req,res,next){
+  console.log(req.body);
+
+  db.newList(req.body)
 });
 
 module.exports = router;

@@ -8,6 +8,6 @@ var userSchema = new mongoose.Schema({
   score: Number,
 });
 
-var User = mongoose.model('User', userSchma, 'users');
+var User = mongoose.model('User', userSchema, 'users');
 
 module.exports = User;
