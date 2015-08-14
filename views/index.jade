@@ -1,11 +1,38 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  form(action='/new-user', method='POST')
-    label(for='name', style='color: black;') Username:
-    input(type='text', name='name')
-    input(type="password" name="password")
-    input(type="password" name="password")
-    input(type='submit', value='New User')
+  
+
+        .content
+          .header
+            
+            .nav
+                h1(class="title") To Do
+                ul
+                    li
+                      div
+                        a(href='/') Home
+                    |   
+                    li
+                      div
+                        a(href='https://github.com/weberl48/spotify-api-visualizer') Github
+                    |   
+                    li
+                      div
+                        a(href='mailto:cer.andrew@gmail.com,sam.genduso@gmail.com,szilvia.deahl@yahoo.com,weberl48@outlook.com') Contact
+                    |   
+            .form
+                form(action='/new-user', method='POST')
+                  .input
+                    label(for='name') Username:
+                    input(type='text', name='name')
+                  .input
+                    label(for='password') Password:
+                    input(type="password" name="password")
+                  .input
+                    label(for='password') Confirm:
+                    input(type="password" name="password")
+                  .input
+                    input(type='submit', value='New User')
+                  
+              
