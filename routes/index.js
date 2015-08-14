@@ -13,21 +13,23 @@ router.get('/', function(req, res, next) {
 
 router.post("/new-list", function(req,res,next){
   db.newList(req.body).then(function(list){
-    console.log(list.list[0]);
     res.redirect('/dash');
   });
 });
 
 router.post("/new-user", function(req,res,next){
-    var newUser = db.newUser(req.body);
-    console.log(newUser[0]);
-    if (newUser[0]){ //if newUser() returns the error array
-      newUser[0].toString();
-      res.render('new',{errors: newUser[0]});
+    var errHash = db.newUser(req.body);
+    if (errHash.errors) {
+      res.render("index",{errors: errHash.errors});
     } else {
       res.redirect('/dash');
     }
 });
 
+router.post("/logIn", function(req,res,next){
+  db.logIn(req.body).then(function(list){
+    res.redirect('/dash');
+  });
+});
 
 module.exports = router;
