@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  
+
       .paper
         .content
             .nav
@@ -49,7 +49,7 @@ block content
                 div
                   h1(class="title") Log In:
                 .form    
-                  form(action='/new-user', method='POST')
+                  form(action='/log-in', method='POST')
                     .input
                       label(for='name') Username:
                       input(type='text', name='name')
