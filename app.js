@@ -6,13 +6,14 @@ var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session')
 var bodyParser = require('body-parser');
 require('dotenv').load();
+var session = require('cookie-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-app.use(cookieSession({
-  name: 'express-mongo-associations-assessment',
+app.use(session({
+  name: 'session',
   keys: [process.env.KEY_1, process.env.KEY_2]
 }));
 // view engine setup

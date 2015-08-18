@@ -1,14 +1,37 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../models');
+var dbc = require('../models');
 var bcrypt = require('bcrypt');
-// var db = require('../lib/database.js');
+var db = require('../lib/database.js');
+var check = require('../lib/validation.js')
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  if (req.session.username) {
+    console.log("cookie found");
+    check.findOne(req.session.username).then(function(user){
+      if(user) {
+        console.log('user found');
+        res.redirect('/dash');
+      }
+    }
+  );
+  }else {
+    res.render('index', {errors: ["Username Not Found"]});
+  }
+
 });
-router.get('/', function(req, res, next) {
-  res.render('newlist', { title: 'Express' });
+router.get('/dash', function(req, res, next) {
+  console.log("Dash Redirect Hit");
+session = req.session;
+username = session.username;
+id = session.id;
+if(id) {  // db.findOne(session.username)
+  check.findList(id).then(function(list){
+    if(list.items){
+      res.render('dash',{title:username,list:list.items});
+    }
+  });
+}
 });
 
 
@@ -19,7 +42,21 @@ router.post("/new-list", function(req,res,next){
 });
 
 router.post("/new-user", function(req,res,next){
-  var x = db.newUser(req.body)
+   formData = req.body;
+   username = req.body.username;
+   password = req.body.password[0];
+   session =  req.session;
+   userInfo = {username:username, password:password, session:session};
+    db.newUser(userInfo).then(function (newUser) {
+      console.log(newUser);
+      if(newUser){
+        res.redirect( '/dash');
+      }
+     else {
+      res.render('index', { errors:["username taken" ]});
+    }
+  });
+  // var x = db.newUser(req.body)
   // console.log(x, "XXXXX");
   // return db.newUser(req.body).then(function (nUser){
   //   console.log("return hit");
@@ -38,18 +75,19 @@ router.post("/new-user", function(req,res,next){
 });
 
 router.post("/log-in", function(req,res,next){
-  console.log(req.body);
-  db.User.findOne({username:req.body.name}).then(function(user){
-    if (user){
-      ;
-      console.log(req.body.password);
-      if (bcrypt.compareSync(req.body.password, user.password)){
-        res.redirect('/dash')
-      } else {
-        res.render("index", {errors:"password incorrect"}) ;
-      }
-    } else {
-      return "user not found";
+    userInfo = req.body;
+  db.logIn(userInfo, req).then(function(user){
+
+    if (user === true) {
+      res.render('index', {title: "Welcome" + userInfo.username });
+    }
+
+    if (user === false) {
+
+      res.render('index', {errors:["username not found"]});
+    }
+    else {
+      res.render('index', {errors:["password doesnt match"]});
     }
   });
 

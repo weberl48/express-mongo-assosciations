@@ -1,0 +1,33 @@
+extends layout
+
+block content
+
+      .paper
+        .content
+            .nav
+              
+                ul
+            
+                    li
+                      div
+                        a(href='/') Home
+                    |   
+                    li
+                      div
+                        a(href='https://github.com/weberl48/spotify-api-visualizer') Github
+                    |   
+                    li
+                      div
+                        a(href='mailto:cer.andrew@gmail.com,sam.genduso@gmail.com,szilvia.deahl@yahoo.com,weberl48@outlook.com') Contact
+                    |  
+          
+            .dash
+              h1 #{title}'s To Do List:
+              if users
+                a(href='/dash/' + users._id + '/list') New List
+              if list
+                for lists in list
+                  ul.list
+                    li -    
+                    =lists
+               

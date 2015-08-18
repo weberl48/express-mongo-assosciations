@@ -2,12 +2,10 @@ var mongoose = require("mongoose");
 
 
 
-
 var listSchema = new mongoose.Schema({
-  name: String,
-  list: Array
-
+  listId: String,
+  items: Array
 });
 
-var List = mongoose.model('List', listSchema, 'list');
+var List = mongoose.model('List', listSchema, 'lists');
 module.exports = List;
