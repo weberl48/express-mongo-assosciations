@@ -241,3 +241,15 @@ margin: 0;
 padding: 0;
 font-size: 20px;
 }
+
+.items  {
+  text-decoration: none;
+}
+.items span {
+    color:black;
+}
+
+.items:hover {
+  color:red;
+  text-decoration: line-through;
+}

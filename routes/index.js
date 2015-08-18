@@ -3,7 +3,7 @@ var router = express.Router();
 var dbc = require('../models');
 var bcrypt = require('bcrypt');
 var db = require('../lib/database.js');
-var check = require('../lib/validation.js')
+var check = require('../lib/validation.js');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   if (req.session.username) {
@@ -27,16 +27,47 @@ username = session.username;
 id = session.id;
 if(id) {  // db.findOne(session.username)
   check.findList(id).then(function(list){
-    if(list.items){
-      res.render('dash',{title:username,list:list.items});
+    console.log(list);
+    if(list === null){
+      res.redirect('/dash/'+ id + '/list');
+    } else {
+      console.log(list.items);
+      res.render('dash',{user:session.username,list:list.items, listId:list.listId});
     }
   });
 }
 });
+router.get('/dash/:id/list', function(req,res,next) {
+  res.render('new');
+});
+router.get('/dash/:items/list/update', function(req,res,next){
+  items = req.params.items;
+  id = req.session.id;
+  db.removeItem(items,id).then(function (success){
+    if (success){
+      res.redirect('/dash');
+    }
+  });
+});
+router.get('/dash/:id/edit', function(req, res, next) {
+  check.findList(req.params.id).then(function(list){
+    res.render('edit', {list:list});
+  });
+    // check.findList(req.session.id).then(function(list){
+    //   if (list){res.render('edit', res.render({items:list.items}))}
+    //
+    // });
+});
+router.post('/list/:id/update', function(req,res,next){
+    userInfo = req.body.items.split(",");
+    db.updateList({items:userInfo},req.params.id).then(function (){
+      res.redirect('/dash');
+    });
+});
 
-
-router.post("/new-list", function(req,res,next){
-  db.newList(req.body).then(function(list){
+router.post("/list", function(req,res,next){
+  var obj = {userInfo:req.body, session:req.session};
+  db.newList(obj).then(function(list){
     res.redirect('/dash');
   });
 });
@@ -79,7 +110,7 @@ router.post("/log-in", function(req,res,next){
   db.logIn(userInfo, req).then(function(user){
 
     if (user === true) {
-      res.render('index', {title: "Welcome" + userInfo.username });
+      res.redirect('/dash');
     }
 
     if (user === false) {

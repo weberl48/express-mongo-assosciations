@@ -22,12 +22,15 @@ block content
                     |  
           
             .dash
-              h1 #{title}'s To Do List:
-              if users
-                a(href='/dash/' + users._id + '/list') New List
+              h1 #{user}'s To Do List:
+              a(href='/dash/' + session.id + '/edit')  Edit List
               if list
-                for lists in list
+                
+                for items in list
                   ul.list
-                    li -    
-                    =lists
+                    li 
+                      a(href=  "/dash/" + items + "/list/update" class="items") 
+                        span
+                          =items
+                  
                
