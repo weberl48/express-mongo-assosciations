@@ -9,10 +9,22 @@ var validate = require('../lib/validation.js');
 router.get('/', function(req, res, next) {
   res.render('index');
 });
+router.get('/dash/:id/new', function (req,res,next){
+res.render('new');
+});
 
 router.get('/dash', function(req, res, next) {
-  db.getAllLists();//Get User Main and Sublist
-  res.render('dash', {usernmae:"USERNAME"});
+  console.log("dashhhhh");
+  id = req.session.id;
+  db.getAllLists(id).then(function(list) {
+    if (list.length > 0){
+      res.render('dash', {lists:list});
+    } else {
+      res.redirect('/dash/'+ id +'/new');
+    }
+
+  });//Get User Main and Sublist
+
 });
 
 router.get('/deleteAll', function (req, res, next) {
@@ -38,8 +50,7 @@ router.post('/list/:id/update', function(req,res,next){
 });
 
 router.post("/list", function(req,res,next){
-
-  db.makeNewList(); //make a new main list then redirect to dash
+  db.makeNewList(req.body, req.session.id); //make a new main list then redirect to dash
   res.redirect("/dash");
 });
 
@@ -53,8 +64,8 @@ router.post("/new-user", function(req,res,next){
   db.signUp(formData).then(function(newUser){//verify user information redirect to dash
     console.log(newUser, "user created and returned");
     if (newUser){
-      res.cookie('username', newUser.name);//setting cookies
-      res.cookie('id', newUser._id); //setting cookies
+      req.session.username = newUser.name;//setting cookies
+      res.session.id = newUser._id; //setting cookies
       res.redirect('/dash'); //if no errors redirect to home
     }
   });
@@ -65,13 +76,14 @@ router.post("/new-user", function(req,res,next){
 router.post("/log-in", function(req,res,next){
   var formData = req.body;
   var errors = validate.logInError(formData);
-  console.log(errors);
   if (errors.length > 0) {
     res.render('index', {errors: errors});
   } else {
     db.findOne(formData).then(function(foundUser){
       if (foundUser) {
         if(db.logIn(formData,foundUser.password)) {
+            req.session.username = foundUser.name;//setting cookies
+            req.session.id = foundUser._id; //setting cookies
             res.redirect('/dash');
           }
            else {
