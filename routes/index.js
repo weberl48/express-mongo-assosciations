@@ -1,9 +1,10 @@
+
 var express = require('express');
 var router = express.Router();
 var dbc = require('../models');
 var bcrypt = require('bcrypt');
 var db = require('../lib/database.js');
-var check = require('../lib/validation.js');
+var validate = require('../lib/validation.js');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index');
@@ -37,18 +38,32 @@ router.post('/list/:id/update', function(req,res,next){
 });
 
 router.post("/list", function(req,res,next){
+
   db.makeNewList(); //make a new main list then redirect to dash
   res.redirect("/dash");
 });
 
 router.post("/new-user", function(req,res,next){
-  db.signUp(); //add user to database with password hash
-  res.redirect('/dash');
+  var formData = req.body;
+  var errors = validate.newUserError(formData); //check for form input errors
+  console.log(errors);
+  if (errors.length > 0) {
+    res.render('index', {errors: errors});
+  } else {
+  db.signUp(formData).then(function(newUser){//verify user information redirect to dash
+    console.log(newUser, "user created and returned");
+    if (newUser){
+      res.cookie('username', newUser.name);//setting cookies
+      res.cookie('id', newUser._id); //setting cookies
+      res.redirect('/dash'); //if no errors redirect to home
+    }
+  });
+  } //add user to database with password hash
+
 });
 
 router.post("/log-in", function(req,res,next){
-  db.logIn(); //verify user information redirect to dash
-  res.redirect('/dash');
+  db.logIn();
 });
 
 router.get('/logout', function (req, res, next) {
@@ -57,7 +72,5 @@ router.get('/logout', function (req, res, next) {
   res.redirect('/');
 });
 /// May add in delete user route
-
-
 
 module.exports = router;
