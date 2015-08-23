@@ -1,5 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Satisfy);
-
+@import url(http://fonts.googleapis.com/css?family=Coming+Soon);
 *:focus {
     outline: 0;
 }
@@ -89,7 +89,7 @@ body {
 
     margin: 0;
     padding:0;
-
+    font-family: Coming+Soon;
 }
 
 .paper {
@@ -170,7 +170,7 @@ body {
 .note {
   color: red;
   position: relative;
-  width: 300px;
+  width: 370px;
   margin: 0 auto;
   padding: 20px;
   font-family: Satisfy;

@@ -17,8 +17,10 @@ router.get('/dash', function(req, res, next) {
   console.log("dashhhhh");
   id = req.session.id;
   db.getAllLists(id).then(function(list) {
+
     if (list.length > 0){
-      res.render('dash', {lists:list});
+      items = list[0].items;
+      res.render('dash', {lists:items , list:id});
     } else {
       res.redirect('/dash/'+ id +'/new');
     }
@@ -33,11 +35,21 @@ router.get('/deleteAll', function (req, res, next) {
 });
 
 router.get('/dash/:items/list/update', function(req,res,next){
-  db.deleteSingleItem(); //delete single item onClick
+  db.deleteSingleItem(req.params.items, req.session.id).then(function(success){
+    if(success){
+      res.redirect('/dash');
+    } else {
+      res.send('Something went wrong');
+    }
+  }); //delete single item onClick
+
 });
 
 router.get('/dash/:id/edit', function(req, res, next) {
-  res.render('edit', {username: "USERNAME"}); //bring up edit page based on list Id
+  db.getAllLists(req.params.id).then(function(list){
+    items = list[0].items;
+   res.render('edit', {list:items});
+ });
 });
 
 router.get('/dash/:id/list/sublist', function(req,res,next){
@@ -45,8 +57,13 @@ router.get('/dash/:id/list/sublist', function(req,res,next){
   res.render('dash', {sublist: 'SUBLIST ITEMS'});
 });
 
-router.post('/list/:id/update', function(req,res,next){
-  db.editMainList(); //add or remove items from the main list through form
+router.post('/list/update', function(req,res,next){
+  console.log("Update List Post");
+  console.log(req.session.id);
+  userInfo = req.body.items.split(",");
+  if(db.editMainList(req.session.id, {items: userInfo})){
+    res.redirect('/dash');
+  }//add or remove items from the main list through form
 });
 
 router.post("/list", function(req,res,next){
@@ -65,7 +82,7 @@ router.post("/new-user", function(req,res,next){
     console.log(newUser, "user created and returned");
     if (newUser){
       req.session.username = newUser.name;//setting cookies
-      res.session.id = newUser._id; //setting cookies
+      req.session.id = newUser._id; //setting cookies
       res.redirect('/dash'); //if no errors redirect to home
     }
   });

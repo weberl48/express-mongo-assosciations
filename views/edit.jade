@@ -21,10 +21,10 @@ block content
           });          
 
       .form
-              form(action='/list/' + list._id + '/update', method='POST')
+              form(action='/list/update', method='POST')
                 .input
                   label(for='items') Items:
-                  textarea( name="items")=list.items
+                  textarea( name="items")=list
                 .input
                 .input
                   label(for="name") Name:

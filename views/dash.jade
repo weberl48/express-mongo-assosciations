@@ -1,6 +1,33 @@
 extends layout
 
 block content
-  if lists 
-    for list in lists
-      p=list.items
+
+      .paper
+        .content
+            .nav
+              
+                ul
+            
+                    li
+                      div
+                        a(href='/') Home
+                    |   
+                    li
+                      div
+                        a(href='https://github.com/weberl48/spotify-api-visualizer') Github
+                    |   
+                    li
+                      div
+                        a(href='mailto:cer.andrew@gmail.com,sam.genduso@gmail.com,szilvia.deahl@yahoo.com,weberl48@outlook.com') Contact
+                    |  
+          
+            .dash
+              h2 #{user}'s To Do List:
+              if list
+                a(href='/dash/' + list + '/edit')  Edit List
+              if lists
+                for items in lists
+                 ul.list
+                   li
+                     a(href="/dash/"+ items+ "/list/update").items
+                       span=items
