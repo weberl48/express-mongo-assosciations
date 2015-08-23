@@ -63,7 +63,26 @@ router.post("/new-user", function(req,res,next){
 });
 
 router.post("/log-in", function(req,res,next){
-  db.logIn();
+  var formData = req.body;
+  var errors = validate.logInError(formData);
+  console.log(errors);
+  if (errors.length > 0) {
+    res.render('index', {errors: errors});
+  } else {
+    db.findOne(formData).then(function(foundUser){
+      if (foundUser) {
+        if(db.logIn(formData,foundUser.password)) {
+            res.redirect('/dash');
+          }
+           else {
+            res.render('index', {errors: ["password invalid"]});
+          }
+      } else {
+        res.render('index', {errors:['username not found']});
+      }
+    });
+    // db.findOne(formData).then(foundUser ? foundUser => db.logIn(foundUser.password) : res.render("index", {errors : ["username not found"]})).then(password ? password => res.redirect('/dash') : res.render('index', {errors:['invalid password']}));
+    }
 });
 
 router.get('/logout', function (req, res, next) {
