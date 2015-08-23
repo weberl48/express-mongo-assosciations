@@ -25,7 +25,7 @@ block content
               h1 #{user}'s To Do List:
               a(href='/dash/' + session.id + '/edit')  Edit List
               if list
-                
+              
                 for items in list
                   ul.list
                     li 
@@ -33,4 +33,16 @@ block content
                         span
                           =items
                   
-               
+              if subList  
+                h2 SubLists:
+                for subLists in subList
+                  ul.list
+                    li
+                      a(href=  "/dash/" + subLists._id + "/list/sublist" class="sublist") 
+                        span
+                          =subLists.name
+                        ul.list
+                          li 
+                            span 
+                              
+                            

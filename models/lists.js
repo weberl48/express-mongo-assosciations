@@ -4,7 +4,8 @@ var mongoose = require("mongoose");
 
 var listSchema = new mongoose.Schema({
   listId: String,
-  items: Array
+  items: Array,
+  subList: Object
 });
 
 var List = mongoose.model('List', listSchema, 'lists');

@@ -3,7 +3,8 @@ var mongoose = require("mongoose");
 
 
 var subListSchema = new mongoose.Schema({
-  listId: String,
+  mainListId: String,
+  name: String,
   items: Array
 });
 
