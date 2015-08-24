@@ -5,15 +5,15 @@ block content
     .content
     h1 New List
     
-      if errors
-        .errors
-          i.pin
-          blockquote.note.yellow
-                .x  X
-                h3.title Errors:
-                for error in errors
-                  p.error
-                  =error
+      //- if errors
+      //-     .errors
+      //-       i.pin
+      //-       blockquote.note.yellow
+      //-             .x  X
+      //-             h3.title Errors:
+      //-             for error in errors
+      //-               p.error
+      //-               =error
         script.
           $('.x').click(function(){
             console.log("clicked")
@@ -23,11 +23,15 @@ block content
       .form
               form(action='/list', method='POST')
                 .input
-                  label(for='username') Name:
-                  input(type='text', name='name')
-                .input
                   label(for='items') Items:
                   textarea( name="items")
+                .input
+                .input
+                  label(for="name") SubName:
+                  input(name="name")
+                .input
+                  label(for="subList") Sub List: 
+                  textarea(name="subItems")
                 .input
                 .input
                   input(type='submit', value='New List' class="button")

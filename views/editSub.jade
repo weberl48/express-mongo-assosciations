@@ -3,7 +3,7 @@ extends layout
 block content
   .paper
     .content
-    h1 New List
+    h1 Edit SubList
     
       if errors
         .errors
@@ -21,11 +21,7 @@ block content
           });          
 
       .form
-              form(action='/list/update', method='POST')
-                .input
-                  label(for='items') Items:
-                  textarea( name="items")=list
-                .input
+              form(action='/subList/update', method='POST')
                 .input
                   label(for="name") Name:
                   input(name="name")=name

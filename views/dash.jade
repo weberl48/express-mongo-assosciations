@@ -22,7 +22,7 @@ block content
                     |  
           
             .dash
-              h2 #{user}'s To Do List:
+              h2  To Do List:
               if list
                 a(href='/dash/' + list + '/edit')  Edit List
               if lists
@@ -31,3 +31,19 @@ block content
                    li
                      a(href="/dash/"+ items+ "/list/update").items
                        span=items
+              if sub
+                
+                for names in sub
+                    ul.lists
+                      li
+                        a(href="/dash/"+ names + "/subList/update").items
+                          span=names
+                for subItem in subItems
+                    .hidden
+                      ul.lists
+                        li
+                          a(href="/dash/"+ subItems +"/"+ subId + "/sublist/remove").items
+                            span=subItem
+                          //- .hidden
+                          //-   p FSDFSFSDFSDFSFSFSFDS
+                              
